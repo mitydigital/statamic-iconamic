@@ -68,6 +68,10 @@ These define the defaults for all fieldtype usages - however you can override th
 This means you could have your default pointing to the "resources" directory, but configure a specific fieldtype
 instance to use "public" instead.
 
+**IMPORTANT: Make sure your `path` exists within your project.** It can be an empty folder, but it must exist for the 
+fieldtype to work. When using the tag, if an icon is not found, it will silently fail, but the path and path helper 
+must be correctly configured.
+
 ## How to Use
 
 ### Fieldtype
@@ -87,7 +91,7 @@ The Iconamic tag makes it easy to inject an SVG icon in to your markup.
 
 The Iconamic tag will look for a field handle of "icon".
 
-```twig
+```html
 {{ iconamic }}
 ```
 
@@ -96,13 +100,13 @@ exception thrown.
 
 You can also pass a `handle` parameter to specify a specific field to use:
 
-```twig
+```html
 {{ iconamic handle="my_iconamic_icon" }}
 ```
 
 If typing 'handle' is too much, you can also do this:
 
-```twig
+```html
 {{ iconamic:my_iconamic_icon }}
 ```
 
@@ -114,7 +118,7 @@ Iconamic comes with a handy `has` helper that returns a boolean response. This i
 an icon exists before outputting any markup, or want to hard-code a default icon (in the event of an optional field, or
 missing icon) in your own antlers file.
 
-```twig
+```html
 <!-- Check if the icon exists -->
 {{ if {iconamic:has} }}
     <!-- Output a wrapper -->
@@ -127,7 +131,7 @@ missing icon) in your own antlers file.
 
 You can also use the `handle` parameter to look for a field other than 'handle':
 
-```twig
+```html
 <!-- Check if the "my_iconamic_icon" exists -->
 {{ if {iconamic:has handle="my_iconamic_icon"} }}
     ...
