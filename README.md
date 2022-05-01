@@ -133,3 +133,21 @@ You can also use the `handle` parameter to look for a field other than 'handle':
     ...
 {{ /if }}
 ```
+
+## Support
+
+We love to share work like this, and help the community. However it does take time, effort and work.
+
+The best thing you can do is [log an issue](../../issues).
+
+Please try to be detailed when logging an issue, including a clear description of the problem, steps to reproduce the
+issue, and any steps you may have tried or taken to overcome the issue too. This is an awesome first step to helping us
+help you. So be awesome - it'll feel fantastic.
+
+## Credits
+
+- [Marty Friedel](https://github.com/martyf)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
