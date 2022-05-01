@@ -1,0 +1,18 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "mix",
+        "development": "mix",
+        "watch": "mix watch",
+        "watch-poll": "mix watch -- --watch-options-poll=1000",
+        "hot": "mix watch --hot",
+        "prod": "npm run production",
+        "production": "mix --production"
+    },
+    "dependencies": {
+        "laravel-mix": "^6.0.43"
+    },
+    "devDependencies": {
+        "vue-loader": "^15.9.8"
+    }
+}
