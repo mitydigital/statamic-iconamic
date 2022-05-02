@@ -1,5 +1,6 @@
 {
     "name": "mitydigital/iconamic",
+    "description": "The SVG icon selector fieldtype and tag for Statamic.",
     "license": "MIT",
     "type": "statamic-addon",
     "autoload": {
