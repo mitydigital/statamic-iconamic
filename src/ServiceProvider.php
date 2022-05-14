@@ -20,7 +20,7 @@ class ServiceProvider extends AddonServiceProvider
         IconamicTag::class
     ];
 
-    public function bootAddon()
+    public function boot()
     {
         $this->mergeConfigFrom(__DIR__.'/../config/iconamic.php', 'statamic.iconamic');
 
