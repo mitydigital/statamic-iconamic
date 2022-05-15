@@ -23,8 +23,8 @@ class MoveConfigFile extends UpdateScript
         if (file_exists(config_path('statamic/iconamic.php'))) {
             if (file_exists(config_path('iconamic.php'))) {
                 // cannot copy
-                $this->console()->warn('The Iconamic config file could not be moved to `config/iconamic.php` - it already exists!');
-                $this->console()->warn('You will need to manually make sure your `config/iconamic.php` file is correctly configured.');
+                $this->console()->alert('The Iconamic config file could not be moved to `config/iconamic.php` - it already exists!');
+                $this->console()->alert('You will need to manually make sure your `config/iconamic.php` file is correctly configured.');
             } else {
                 // move the config file
                 rename(config_path('statamic/iconamic.php'), config_path('iconamic.php'));
