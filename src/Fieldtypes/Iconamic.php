@@ -19,7 +19,7 @@ class Iconamic extends Fieldtype
     public function preload(): array
     {
         // what path do we want to look at?
-        $path = $this->config('path', config('statamic.iconamic.path'));
+        $path = $this->config('path', config('iconamic.path'));
 
         // what helper do we want to use?
         $pathHelper = $this->config('path_helper', 'default');
@@ -61,15 +61,15 @@ class Iconamic extends Fieldtype
         return [
             'path'        => [
                 'display'      => 'Path Override',
-                'instructions' => 'Your default is configured to be "'.config('statamic.iconamic.path').'".',
+                'instructions' => 'Your default is configured to be "'.config('iconamic.path').'".',
                 'type'         => 'text',
                 'default'      => null,
                 'width'        => 33,
-                'placeholder'  => config('statamic.iconamic.path')
+                'placeholder'  => config('iconamic.path')
             ],
             'path_helper' => [
                 'display'      => 'Path Helper Override',
-                'instructions' => 'Your default is configured to be "'.config('statamic.iconamic.path_helper').'".',
+                'instructions' => 'Your default is configured to be "'.config('iconamic.path_helper').'".',
                 'type'         => 'select',
                 'default'      => 'default',
                 'options'      => [

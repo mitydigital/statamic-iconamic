@@ -46,7 +46,7 @@ class Iconamic
     {
         // if the pathHelper is the default, get it from the config
         if ($pathHelper === 'default') {
-            $pathHelper = config('statamic.iconamic.path_helper');
+            $pathHelper = config('iconamic.path_helper');
         }
 
         // build the directory based off of the configured path and path helper

@@ -128,7 +128,7 @@ class Iconamic extends Tags
         $config = $field->config();
 
         // what path do we want to look at?
-        $path = $config['path'] ?? config('statamic.iconamic.path');
+        $path = $config['path'] ?? config('iconamic.path');
 
         // what helper do we want to use?
         $pathHelper = $config['path_helper'] ?? 'default';

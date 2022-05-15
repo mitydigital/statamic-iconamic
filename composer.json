@@ -1,44 +1,44 @@
 {
-    "name": "mitydigital/iconamic",
-    "description": "The SVG icon selector fieldtype and tag for Statamic.",
-    "license": "MIT",
-    "type": "statamic-addon",
-    "autoload": {
-        "psr-4": {
-            "MityDigital\\Iconamic\\": "src"
-        }
-    },
-    "extra": {
-        "statamic": {
-            "name": "Iconamic",
-            "description": "The SVG Icon Selector for Statamic 3"
-        },
-        "laravel": {
-            "providers": [
-                "MityDigital\\Iconamic\\ServiceProvider"
-            ]
-        }
-    },
-    "require": {
-        "statamic/cms": "~3.3"
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "MityDigital\\Iconamic\\Tests\\": "tests/"
-        }
-    },
-    "require-dev": {
-        "orchestra/testbench": "^6.9|^7.1",
-        "phpunit/phpunit": "^9.5"
-    },
-    "scripts": {
-        "test": [
-            "./vendor/bin/phpunit"
-        ]
-    },
-    "config": {
-        "allow-plugins": {
-            "pixelfear/composer-dist-plugin": true
-        }
+  "name": "mitydigital/iconamic",
+  "description": "The SVG icon selector fieldtype and tag for Statamic.",
+  "license": "MIT",
+  "type": "statamic-addon",
+  "autoload": {
+    "psr-4": {
+      "MityDigital\\Iconamic\\": "src"
     }
+  },
+  "extra": {
+    "statamic": {
+      "name": "Iconamic",
+      "description": "The SVG Icon Selector for Statamic 3"
+    },
+    "laravel": {
+      "providers": [
+        "MityDigital\\Iconamic\\ServiceProvider"
+      ]
+    }
+  },
+  "require": {
+    "statamic/cms": "~3.3"
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MityDigital\\Iconamic\\Tests\\": "tests/"
+    }
+  },
+  "require-dev": {
+    "orchestra/testbench": "^6.9|^7.1",
+    "phpunit/phpunit": "^9.5"
+  },
+  "scripts": {
+    "test": [
+      "./vendor/bin/phpunit"
+    ]
+  },
+  "config": {
+    "allow-plugins": {
+      "pixelfear/composer-dist-plugin": true
+    }
+  }
 }

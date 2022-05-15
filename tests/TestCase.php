@@ -23,7 +23,7 @@ abstract class TestCase extends OrchestraTestCase
         parent::setUp();
 
         config([
-            'statamic.iconamic' => [
+            'iconamic' => [
                 'path'        => 'svg',
                 'path_helper' => 'base_path'
             ]
