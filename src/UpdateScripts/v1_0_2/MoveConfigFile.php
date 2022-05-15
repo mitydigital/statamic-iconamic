@@ -1,6 +1,6 @@
 <?php
 
-namespace MityDigital\Iconamic\UpdateScripts\v2_0_2;
+namespace MityDigital\Iconamic\UpdateScripts\v1_0_2;
 
 use Illuminate\Support\Facades\Artisan;
 use Statamic\UpdateScripts\UpdateScript;
@@ -9,7 +9,7 @@ class MoveConfigFile extends UpdateScript
 {
     public function shouldUpdate($newVersion, $oldVersion)
     {
-        return $this->isUpdatingTo('2.0.2');
+        return $this->isUpdatingTo('1.0.2');
     }
 
     public function update()

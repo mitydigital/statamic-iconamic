@@ -4,7 +4,7 @@ namespace MityDigital\Iconamic;
 
 use MityDigital\Iconamic\Fieldtypes\Iconamic as IconamicFieldtype;
 use MityDigital\Iconamic\Tags\Iconamic as IconamicTag;
-use MityDigital\Iconamic\UpdateScripts\v2_0_2\MoveConfigFile;
+use MityDigital\Iconamic\UpdateScripts\v1_0_2\MoveConfigFile;
 use Statamic\Providers\AddonServiceProvider;
 
 class ServiceProvider extends AddonServiceProvider
@@ -22,7 +22,7 @@ class ServiceProvider extends AddonServiceProvider
     ];
 
     protected $updateScripts = [
-        // v2.0.2
+        // v1.0.2
         MoveConfigFile::class
     ];
 }
