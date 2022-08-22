@@ -113,25 +113,45 @@ class Iconamic extends Tags
             $icon = $this->context[$handle];
         }
 
-        // if there's no icon or there's no fieldtype, quietly fail
-        // (FYI, no fieldtype happens if the handle remains in content, but is no longer in the blueprint)
-        if (!$icon || !$icon->fieldtype()) {
-            if ($checkIconExistsOnly) {
-                return false;
-            } else {
-                return '';
+        // manual mode
+        // is there an 'icon' and 'path' param?
+        if (!$icon && $this->params->has('icon') && $this->params->has('path')) {
+            // load the raw file
+            $icon = $this->params->get('icon', false);
+            $path = $this->params->get('path', '');
+
+            // do we have a path helper?
+            $pathHelper = $this->params->has('path_helper') ? $this->params->get('path_helper', 'default') : 'default';
+
+            // if there's still no icon, then it doesn't exist
+            if (!$icon) {
+                if ($checkIconExistsOnly) {
+                    return false;
+                } else {
+                    return '';
+                }
             }
+        } else {
+            // if there's no icon or there's no fieldtype, quietly fail
+            // (FYI, no fieldtype happens if the handle remains in content, but is no longer in the blueprint)
+            if (!$icon || !$icon->fieldtype()) {
+                if ($checkIconExistsOnly) {
+                    return false;
+                } else {
+                    return '';
+                }
+            }
+
+            // get the field
+            $field = $icon->field();
+            $config = $field->config();
+
+            // what path do we want to look at?
+            $path = $config['path'] ?? config('iconamic.path');
+
+            // what helper do we want to use?
+            $pathHelper = $config['path_helper'] ?? 'default';
         }
-
-        // get the field
-        $field  = $icon->field();
-        $config = $field->config();
-
-        // what path do we want to look at?
-        $path = $config['path'] ?? config('iconamic.path');
-
-        // what helper do we want to use?
-        $pathHelper = $config['path_helper'] ?? 'default';
 
         // get the full path for the icon
         $path = IconamicFacade::getPath($path, $pathHelper, $icon.'.svg');
