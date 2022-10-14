@@ -109,8 +109,10 @@ class Iconamic extends Tags
         }
 
         $icon = null;
-        if (is_array($this->context) && array_key_exists($handle, $this->context) || isset($this->context[$handle])) {
-	        // if the context is NOT a string (if its a string, treat it as a manual one)
+        if ($this->params->has('icon') && $this->params->has('path')) {
+            // do nothing, treat it as a manual
+        } elseif (is_array($this->context) && array_key_exists($handle, $this->context) || isset($this->context[$handle])) {
+            // if the context is NOT a string (if its a string, treat it as a manual one)
             if (!is_string($this->context[$handle])) {
                 $icon = $this->context[$handle];
             }
