@@ -24,10 +24,22 @@ class Iconamic extends Fieldtype
         // what helper do we want to use?
         $pathHelper = $this->config('path_helper', 'default');
 
+        $enableRecursiveMode = false;
+        switch($this->config('recursive', 'default')) {
+            case 'false':
+                $enableRecursiveMode = false;
+                break;
+            case 'true':
+                $enableRecursiveMode = true;
+                break;
+            default:
+                $enableRecursiveMode = config('iconamic.recursive', false);
+        }
+
         // load the icons for the select list
         $icons = [];
 
-        if (config('iconamic.recursive', false)) {
+        if ($enableRecursiveMode) {
             // recursively list files
             $dir = new \DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
             $path = IconamicFacade::getPath($path, $pathHelper);
@@ -36,7 +48,7 @@ class Iconamic extends Fieldtype
             foreach ($files as $file) {
                 if ($file->getExtension() == 'svg') {
                     // get the new name
-                    $name = str_replace($path .'/', '', $file->getRealPath());
+                    $name = str_replace($path.'/', '', $file->getRealPath());
                     $key = str_replace('.svg', '', $name);
 
                     $svg = file_get_contents($file->getRealPath());
@@ -83,28 +95,40 @@ class Iconamic extends Fieldtype
     protected function configFieldItems(): array
     {
         return [
-            'path'        => [
-                'display'      => 'Path Override',
+            'path' => [
+                'display' => 'Path Override',
                 'instructions' => 'Your default is configured to be "'.config('iconamic.path').'".',
-                'type'         => 'text',
-                'default'      => null,
-                'width'        => 33,
-                'placeholder'  => config('iconamic.path')
+                'type' => 'text',
+                'default' => null,
+                'width' => 33,
+                'placeholder' => config('iconamic.path')
             ],
             'path_helper' => [
-                'display'      => 'Path Helper Override',
+                'display' => 'Path Helper Override',
                 'instructions' => 'Your default is configured to be "'.config('iconamic.path_helper').'".',
-                'type'         => 'select',
-                'default'      => 'default',
-                'options'      => [
-                    'default'       => __('Use Default'),
-                    'app_path'      => __('App (app_path)'),
-                    'base_path'     => __('Base (base_path)'),
-                    'public_path'   => __('Public (public_path)'),
+                'type' => 'select',
+                'default' => 'default',
+                'options' => [
+                    'default' => __('Use Default'),
+                    'app_path' => __('App (app_path)'),
+                    'base_path' => __('Base (base_path)'),
+                    'public_path' => __('Public (public_path)'),
                     'resource_path' => __('Resource (resource_path)'),
-                    'storage_path'  => __('Storage (storage_path)'),
+                    'storage_path' => __('Storage (storage_path)'),
                 ],
-                'width'        => 33
+                'width' => 33
+            ],
+            'recursive' => [
+                'display' => 'Recursively list icons?',
+                'instructions' => 'Your default is configured to '.(config('iconamic.recursive') ? 'recursively list icons within the path' : 'list within the path only').'.',
+                'type' => 'select',
+                'default' => 'default',
+                'options' => [
+                    'default' => __('Use Default'),
+                    'false' => __('Recursive mode disabled'),
+                    'true' => __('Recursive mode enabled')
+                ],
+                'width' => 33
             ],
         ];
     }
