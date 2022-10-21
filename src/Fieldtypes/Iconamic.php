@@ -26,17 +26,41 @@ class Iconamic extends Fieldtype
 
         // load the icons for the select list
         $icons = [];
-        $dir   = new \DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
-        $index = 0;
-        foreach ($dir as $fileinfo) {
-            if (!$fileinfo->isDot() && $fileinfo->getExtension() == 'svg') {
-                $key = str_replace('.svg', '', $fileinfo->getBasename());
-                $svg = file_get_contents($fileinfo->getRealPath());
 
-                // clean that svg (ick)
-                $icons[$key] = IconamicFacade::cleanSvg($svg, $index);
+        if (config('iconamic.recursive', false)) {
+            // recursively list files
+            $dir = new \DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
+            $path = IconamicFacade::getPath($path, $pathHelper);
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+            $index = 0;
+            foreach ($files as $file) {
+                if ($file->getExtension() == 'svg') {
+                    // get the new name
+                    $name = str_replace($path .'/', '', $file->getRealPath());
+                    $key = str_replace('.svg', '', $name);
 
-                $index++; // increase the index
+                    $svg = file_get_contents($file->getRealPath());
+
+                    // clean that svg (ick)
+                    $icons[$key] = IconamicFacade::cleanSvg($svg, $index);
+
+                    $index++; // increase the index
+                }
+            }
+        } else {
+            // the old way of doing it
+            $dir = new \DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
+            $index = 0;
+            foreach ($dir as $fileinfo) {
+                if (!$fileinfo->isDot() && $fileinfo->getExtension() == 'svg') {
+                    $key = str_replace('.svg', '', $fileinfo->getBasename());
+                    $svg = file_get_contents($fileinfo->getRealPath());
+
+                    // clean that svg (ick)
+                    $icons[$key] = IconamicFacade::cleanSvg($svg, $index);
+
+                    $index++; // increase the index
+                }
             }
         }
 

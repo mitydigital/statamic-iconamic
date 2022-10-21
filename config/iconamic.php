@@ -35,6 +35,21 @@ return [
     |
     */
 
-    'path_helper' => 'resource_path'
+    'path_helper' => 'resource_path',
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Recursively list icons?
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, Iconamic will recursively list icons in your configured
+    | paths. This is really handy for helping organise sites with many icons.
+    |
+    | When disabled, only icons in the exact path configuration are listed.
+    |
+    */
+
+    'recursive' => false
 
 ];
