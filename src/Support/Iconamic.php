@@ -73,9 +73,28 @@ class Iconamic
                 throw IconamicException::unknownPathHelper($pathHelper);
         }
 
-        if ($filename) {
+        $path = explode('/', $filename);
+        $stack = array();
+        foreach ($path as $seg) {
+            if ($seg == '..') {
+                // Ignore this segment, remove last segment from stack
+                array_pop($stack);
+                continue;
+            }
+
+            if ($seg == '.') {
+                // Ignore this segment
+                continue;
+            }
+
+            $stack[] = $seg;
+        }
+
+        $cleanFilename = implode('/', $stack);
+
+        if ($cleanFilename) {
             // return the full path with the filename
-            return $directory.DIRECTORY_SEPARATOR.$filename;
+            return $directory.DIRECTORY_SEPARATOR.$cleanFilename;
         } else {
             // return the full path with no filename
             return $directory;
