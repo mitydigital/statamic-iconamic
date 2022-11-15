@@ -34,6 +34,7 @@ abstract class TestCase extends OrchestraTestCase
         File::makeDirectory(resource_path('icon-svg'), 0755);
         File::copy(__DIR__.'/TestSupport/svg/square.svg', resource_path('icon-svg').'/square.svg');
         File::copy(__DIR__.'/TestSupport/svg/x.svg', resource_path('icon-svg').'/x.svg');
+        File::copy(__DIR__.'/TestSupport/svg/simple.svg', resource_path('icon-svg').'/simple.svg');
     }
 
     /**

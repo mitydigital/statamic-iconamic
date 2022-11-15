@@ -31,48 +31,6 @@ class Iconamic extends Tags
         return $this->_getIcon();
     }
 
-
-    /**
-     * The {{ iconamic:has }} tag.
-     *
-     * Checks for whether the SVG icon exists or not, and returns a boolean response.
-     *
-     * Like index, will look for your "icon" field, or the field specified by the "handle" parameter.
-     *
-     * {{ iconamic:has }}
-     *   Looks for a field called "icon", and uses that to check if it exists
-     *
-     * {{ iconamic:has handle="my_field" }}
-     *   Looks for a field called "my_field", and uses that to check if it exists
-     *
-     * @return bool
-     * @throws IconamicException
-     */
-    public function has(): bool
-    {
-        return $this->_getIcon(null, true);
-    }
-
-
-    /**
-     * The {{ iconamic:* }} tag.
-     *
-     * Who needs to specify a handle when you can use the wildcard approach? Basically this is shorthand of the index.
-     *
-     * {{ iconamic:my_field }}
-     *   Looks for a field called "my_field", and uses that to get the icon
-     *
-     * @param  string  $handle  The handle to use as the source for the icon
-     *
-     * @return string
-     * @throws IconamicException
-     */
-    public function wildcard(string $handle): string
-    {
-        return $this->_getIcon($handle);
-    }
-
-
     /**
      * The actual logic for the tag all lives here, given all three access methods use it.
      *
@@ -111,7 +69,8 @@ class Iconamic extends Tags
         $icon = null;
         if ($this->params->has('icon') && $this->params->has('path')) {
             // do nothing, treat it as a manual
-        } elseif (is_array($this->context) && array_key_exists($handle, $this->context) || isset($this->context[$handle])) {
+        } elseif (is_array($this->context) && array_key_exists($handle,
+                $this->context) || isset($this->context[$handle])) {
             // if the context is NOT a string (if its a string, treat it as a manual one)
             if (!is_string($this->context[$handle])) {
                 $icon = $this->context[$handle];
@@ -191,6 +150,26 @@ class Iconamic extends Tags
         }
     }
 
+    /**
+     * The {{ iconamic:has }} tag.
+     *
+     * Checks for whether the SVG icon exists or not, and returns a boolean response.
+     *
+     * Like index, will look for your "icon" field, or the field specified by the "handle" parameter.
+     *
+     * {{ iconamic:has }}
+     *   Looks for a field called "icon", and uses that to check if it exists
+     *
+     * {{ iconamic:has handle="my_field" }}
+     *   Looks for a field called "my_field", and uses that to check if it exists
+     *
+     * @return bool
+     * @throws IconamicException
+     */
+    public function has(): bool
+    {
+        return $this->_getIcon(null, true);
+    }
 
     /**
      * Processes the SVG markup to replace common patterns regarding ID usage.
@@ -207,6 +186,36 @@ class Iconamic extends Tags
      */
     protected function updateSvgMarkup(string $svg, int $index): string
     {
-        return IconamicFacade::cleanSvg($svg, $index);
+        // exclude these params
+        $exclude = [
+            'icon', 'handle', 'path_helper', 'path'
+        ];
+
+        $attributes = [];
+        foreach ($this->params as $param => $value) {
+            if (!in_array($param, $exclude)) {
+                $attributes[$param] = $value;
+            }
+        }
+
+        return IconamicFacade::cleanSvg($svg, $index, $attributes);
+    }
+
+    /**
+     * The {{ iconamic:* }} tag.
+     *
+     * Who needs to specify a handle when you can use the wildcard approach? Basically this is shorthand of the index.
+     *
+     * {{ iconamic:my_field }}
+     *   Looks for a field called "my_field", and uses that to get the icon
+     *
+     * @param  string  $handle  The handle to use as the source for the icon
+     *
+     * @return string
+     * @throws IconamicException
+     */
+    public function wildcard(string $handle): string
+    {
+        return $this->_getIcon($handle);
     }
 }

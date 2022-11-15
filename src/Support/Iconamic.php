@@ -15,17 +15,52 @@ class Iconamic
      *
      * @param  string  $svg
      * @param  int  $index
+     * @param  array  $attributes
      *
      * @return string
      */
-    public function cleanSvg(string $svg, int $index): string
+    public function cleanSvg(string $svg, int $index, array $attributes = []): string
     {
         // make "#id" and id="" unique
         $svg = str_replace(' id="', ' id="iconamic-'.$index.'-', $svg);
         $svg = str_replace(' xlink:href="#', ' xlink:href="#iconamic-'.$index.'-', $svg);
         $svg = str_replace('url(#', 'url(#iconamic-'.$index.'-', $svg);
 
-        return $svg;
+        // replace attributes
+        $dom = new \DOMDocument();
+        $dom->loadXML($svg, LIBXML_NOERROR);
+
+        // if we have classReplace, do this first because it may be appended to by "class"
+        if (array_key_exists('classReplace', $attributes))
+        {
+            // set the class from classReplace
+            $dom->documentElement->setAttribute('class', $attributes['classReplace']);
+
+            unset($attributes['classReplace']);
+        }
+
+        foreach($attributes as $attribute => $value)
+        {
+            if ($attribute === 'class')
+            {
+                if ($dom->documentElement->hasAttribute('class'))
+                {
+                    // append to the class
+                    $existing = $dom->documentElement->getAttribute('class');
+                    $dom->documentElement->setAttribute($attribute, $existing.' '.$value);
+                }
+                else {
+                    // add the class
+                    $dom->documentElement->setAttribute($attribute, $value);
+                }
+            }
+            else {
+                // overwrite attribute - simply add it
+                $dom->documentElement->setAttribute($attribute, $value);
+            }
+        }
+
+        return $dom->saveXML($dom->documentElement);
     }
 
     /**

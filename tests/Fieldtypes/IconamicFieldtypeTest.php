@@ -26,7 +26,8 @@ class IconamicFieldtypeTest extends TestCase
         $this->assertEquals(
             [
                 'path',
-                'path_helper'
+                'path_helper',
+                'recursive'
             ],
             $fields->values()->keys()->toArray()
         );
