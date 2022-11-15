@@ -2,7 +2,6 @@
 
 namespace MityDigital\Iconamic\Support;
 
-use Illuminate\Support\Str;
 use MityDigital\Iconamic\Exceptions\IconamicException;
 
 class Iconamic
@@ -32,32 +31,26 @@ class Iconamic
         $dom->loadXML($svg, LIBXML_NOERROR);
 
         // if we have classReplace, do this first because it may be appended to by "class"
-        if (array_key_exists('classReplace', $attributes))
-        {
+        if (array_key_exists('classReplace', $attributes)) {
             // set the class from classReplace
             $dom->documentElement->setAttribute('class', $attributes['classReplace']);
 
             unset($attributes['classReplace']);
         }
 
-        foreach($attributes as $attribute => $value)
-        {
-            if ($attribute === 'class')
-            {
-                if ($dom->documentElement->hasAttribute('class'))
-                {
+        foreach ($attributes as $attribute => $value) {
+            if ($attribute === 'class') {
+                if ($dom->documentElement->hasAttribute('class')) {
                     // append to the class
                     $existing = $dom->documentElement->getAttribute('class');
                     $dom->documentElement->setAttribute($attribute, $existing.' '.$value);
-                }
-                else {
+                } else {
                     // add the class
                     $dom->documentElement->setAttribute($attribute, $value);
                 }
-            }
-            else {
+            } else {
                 // overwrite attribute - simply add it
-                $dom->documentElement->setAttribute(Str::kebab($attribute), $value);
+                $dom->documentElement->setAttribute($attribute, $value);
             }
         }
 

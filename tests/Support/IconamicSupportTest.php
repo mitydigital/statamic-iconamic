@@ -122,20 +122,6 @@ class IconamicSupportTest extends TestCase
                 'monkey' => 'tail'
             ]));
 
-        // ensure attribute is converted to kebab case
-        $this->assertEquals(
-            '<svg class="w-4 h-4" stroke-width="2"/>',
-            Iconamic::cleanSvg('<svg class="w-4 h-4"></svg>', 2, [
-                'strokeWidth' => '2'
-            ]));
-
-        // ensure kebab case remains as is
-        $this->assertEquals(
-            '<svg class="w-4 h-4" stroke-width="2"/>',
-            Iconamic::cleanSvg('<svg class="w-4 h-4"></svg>', 2, [
-                'stroke-width' => '2'
-            ]));
-
         // id is updated accordingly by the cleaner, and left as is
         $this->assertEquals(
             '<svg id="iconamic-2-svg" class="w-4 h-4"/>',

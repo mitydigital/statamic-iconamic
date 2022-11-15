@@ -53,7 +53,7 @@ class IconamicFieldtypeTest extends TestCase
         $icons = $this->fieldtype->preload();
 
         $this->assertArrayHasKey('icons', $icons);
-        $this->assertCount(4, $icons['icons']);
+        $this->assertCount(5, $icons['icons']);
     }
 
     /** @test */
@@ -72,6 +72,6 @@ class IconamicFieldtypeTest extends TestCase
         $icons = $this->fieldtype->preload();
 
         $this->assertArrayHasKey('icons', $icons);
-        $this->assertCount(2, $icons['icons']);
+        $this->assertCount(3, $icons['icons']);
     }
 }
