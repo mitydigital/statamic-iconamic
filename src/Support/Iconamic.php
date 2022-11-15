@@ -2,6 +2,7 @@
 
 namespace MityDigital\Iconamic\Support;
 
+use Illuminate\Support\Str;
 use MityDigital\Iconamic\Exceptions\IconamicException;
 
 class Iconamic
@@ -56,7 +57,7 @@ class Iconamic
             }
             else {
                 // overwrite attribute - simply add it
-                $dom->documentElement->setAttribute($attribute, $value);
+                $dom->documentElement->setAttribute(Str::kebab($attribute), $value);
             }
         }
 
