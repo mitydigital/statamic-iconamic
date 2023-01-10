@@ -2,7 +2,10 @@
 
 namespace MityDigital\Iconamic\Fieldtypes;
 
+use DirectoryIterator;
 use MityDigital\Iconamic\Facades\Iconamic as IconamicFacade;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use Statamic\Fields\Fieldtype;
 
 class Iconamic extends Fieldtype
@@ -25,7 +28,7 @@ class Iconamic extends Fieldtype
         $pathHelper = $this->config('path_helper', 'default');
 
         $enableRecursiveMode = false;
-        switch($this->config('recursive', 'default')) {
+        switch ($this->config('recursive', 'default')) {
             case 'false':
                 $enableRecursiveMode = false;
                 break;
@@ -41,15 +44,19 @@ class Iconamic extends Fieldtype
 
         if ($enableRecursiveMode) {
             // recursively list files
-            $dir = new \DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
+            $dir = new DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
             $path = IconamicFacade::getPath($path, $pathHelper);
-            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+            $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
             $index = 0;
             foreach ($files as $file) {
-                if ($file->getExtension() == 'svg') {
+                if ($file->isFile() && $file->getExtension() == 'svg') {
                     // get the new name
                     $name = str_replace($path.'/', '', $file->getRealPath());
-                    $key = str_replace('.svg', '', $name);
+
+                    $key = $name;
+                    if (str_ends_with($name, '.svg')) {
+                        $key = substr($key, 0, -4);
+                    }
 
                     $svg = file_get_contents($file->getRealPath());
 
@@ -61,11 +68,18 @@ class Iconamic extends Fieldtype
             }
         } else {
             // the old way of doing it
-            $dir = new \DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
+            $dir = new DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
             $index = 0;
             foreach ($dir as $fileinfo) {
-                if (!$fileinfo->isDot() && $fileinfo->getExtension() == 'svg') {
-                    $key = str_replace('.svg', '', $fileinfo->getBasename());
+
+                if (!$fileinfo->isDot() && $fileinfo->isFile() && $fileinfo->getExtension() == 'svg') {
+
+                    $name = str_replace($path.'/', '', $fileinfo->getBasename());
+                    $key = $name;
+                    if (str_ends_with($name, '.svg')) {
+                        $key = substr($key, 0, -4);
+                    }
+
                     $svg = file_get_contents($fileinfo->getRealPath());
 
                     // clean that svg (ick)
