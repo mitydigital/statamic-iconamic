@@ -3,30 +3,30 @@
     <div class="flex">
         <v-select
             ref="input"
-            class="flex-1"
-            :name="name"
             :clearable="config.clearable"
+            :close-on-select="true"
+            :create-option="(value) => ({ value, label: value })"
             :disabled="config.disabled || isReadOnly"
+            :multiple="false"
+            :name="name"
             :options="options"
             :placeholder="config.placeholder"
             :searchable="true"
-            :multiple="false"
-            :close-on-select="true"
             :value="this.value"
-            :create-option="(value) => ({ value, label: value })"
+            class="flex-1"
             @input="vueSelectUpdated"
             @search:focus="$emit('focus')"
             @search:blur="$emit('blur')">
             <template slot="option" slot-scope="option">
                 <span class="flex items-center">
                 <span class="flex-none iconamic-is-svg block w-4 h-4" v-html="option.svg"></span>
-                <span class="ml-2">{{ option.label }}</span>
+                <span class="ml-2 truncate">{{ option.label }}</span>
                 </span>
             </template>
             <template slot="selected-option" slot-scope="option">
                 <span class="flex items-center">
                 <span class="flex-none iconamic-is-svg block w-4 h-4" v-html="meta.icons[option.label]"></span>
-                <span class="ml-2">{{ option.label }}</span>
+                <span class="ml-2 truncate">{{ option.label }}</span>
                 </span>
             </template>
         </v-select>
