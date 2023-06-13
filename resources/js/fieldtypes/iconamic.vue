@@ -3,30 +3,31 @@
     <div class="flex">
         <v-select
             ref="input"
-            :clearable="config.clearable"
-            :close-on-select="true"
-            :create-option="(value) => ({ value, label: value })"
-            :disabled="config.disabled || isReadOnly"
-            :multiple="false"
+            class="w-full"
+            append-to-body
+            clearable
             :name="name"
+            :disabled="config.disabled || isReadOnly"
             :options="options"
-            :placeholder="config.placeholder"
+            :placeholder="config.placeholder || 'Search ...'"
             :searchable="true"
-            :value="this.value"
-            class="flex-1"
+            :multiple="false"
+            :close-on-select="true"
+            :value="selectedOption"
+            :create-option="(value) => ({ value, label: value })"
             @input="vueSelectUpdated"
             @search:focus="$emit('focus')"
             @search:blur="$emit('blur')">
             <template slot="option" slot-scope="option">
                 <span class="flex items-center">
-                <span class="flex-none iconamic-is-svg block w-4 h-4" v-html="option.svg"></span>
-                <span class="ml-2 truncate">{{ option.label }}</span>
+                <span class="flex-none iconamic-is-svg block w-5 h-5" v-html="option.svg"></span>
+                <span class="text-xs ml-4 text-gray-800 truncate">{{ option.label }}</span>
                 </span>
             </template>
             <template slot="selected-option" slot-scope="option">
                 <span class="flex items-center">
-                <span class="flex-none iconamic-is-svg block w-4 h-4" v-html="meta.icons[option.label]"></span>
-                <span class="ml-2 truncate">{{ option.label }}</span>
+                <span class="flex-none iconamic-is-svg block w-5 h-5" v-html="meta.icons[option.label]"></span>
+                <span class="text-xs ml-4 text-gray-800 truncate">{{ option.label }}</span>
                 </span>
             </template>
         </v-select>
@@ -35,6 +36,7 @@
 </template>
 
 <script>
+
 export default {
 
     mixins: [Fieldtype],
