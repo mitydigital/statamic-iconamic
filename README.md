@@ -4,13 +4,14 @@
 
 
 ![Statamic 3.0+](https://img.shields.io/badge/Statamic-3.0+-FF269E?style=for-the-badge&link=https://statamic.com)
+![Statamic 4.0](https://img.shields.io/badge/Statamic-4.0-FF269E?style=for-the-badge&link=https://statamic.com)
 [![Iconamic on Packagist](https://img.shields.io/packagist/v/mitydigital/iconamic?style=for-the-badge)](https://packagist.org/packages/mitydigital/iconamic/stats)
 
 ---
 
 <!-- /statamic:hide -->
 
-> Iconamic is an SVG icon picker fieldtype and tag for Statamic 3.
+> Iconamic is an SVG icon picker fieldtype and tag for Statamic 3 and Statamic 4
 
 ![The Iconamic fieldtype](./images/iconamic-fieldtype.jpg)
 
