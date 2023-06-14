@@ -13,7 +13,7 @@
             :searchable="true"
             :multiple="false"
             :close-on-select="true"
-            :value="selectedOption"
+            :value="this.value"
             :create-option="(value) => ({ value, label: value })"
             @input="vueSelectUpdated"
             @search:focus="$emit('focus')"
