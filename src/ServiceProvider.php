@@ -13,10 +13,6 @@ class ServiceProvider extends AddonServiceProvider
         IconamicFieldtype::class
     ];
 
-    protected $scripts = [
-        __DIR__.'/../dist/js/iconamic.js'
-    ];
-
     protected $tags = [
         IconamicTag::class
     ];
@@ -24,5 +20,12 @@ class ServiceProvider extends AddonServiceProvider
     protected $updateScripts = [
         // v1.0.2
         MoveConfigFile::class
+    ];
+
+    protected $vite = [
+        'input' => [
+            'resources/js/index.js',
+        ],
+        'publicDirectory' => 'resources/dist',
     ];
 }
