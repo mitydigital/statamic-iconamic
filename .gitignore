@@ -9,3 +9,6 @@ package-lock.json
 mix-manifest.json
 composer.lock
 .php-cs-fixer.cache
+.phpunit.cache
+resources/dist/hot
+.env
