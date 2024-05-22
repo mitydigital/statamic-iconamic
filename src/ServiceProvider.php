@@ -10,16 +10,16 @@ use Statamic\Providers\AddonServiceProvider;
 class ServiceProvider extends AddonServiceProvider
 {
     protected $fieldtypes = [
-        IconamicFieldtype::class
+        IconamicFieldtype::class,
     ];
 
     protected $tags = [
-        IconamicTag::class
+        IconamicTag::class,
     ];
 
     protected $updateScripts = [
         // v1.0.2
-        MoveConfigFile::class
+        MoveConfigFile::class,
     ];
 
     protected $vite = [

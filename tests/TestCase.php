@@ -12,7 +12,6 @@ use Statamic\Statamic;
 
 abstract class TestCase extends OrchestraTestCase
 {
-    /** @var AssetContainer */
     protected AssetContainer $assetContainer;
 
     /**
@@ -24,9 +23,9 @@ abstract class TestCase extends OrchestraTestCase
 
         config([
             'iconamic' => [
-                'path'        => 'svg',
-                'path_helper' => 'base_path'
-            ]
+                'path' => 'svg',
+                'path_helper' => 'base_path',
+            ],
         ]);
 
         File::copyDirectory(__DIR__.'/TestSupport/svg', base_path('svg'));
@@ -78,7 +77,7 @@ abstract class TestCase extends OrchestraTestCase
 
         $app->make(\Statamic\Extend\Manifest::class)->manifest = [
             'mitydigital/iconamic' => [
-                'id'        => 'mitydigital/iconamic',
+                'id' => 'mitydigital/iconamic',
                 'namespace' => 'MityDigital\\Iconamic\\',
             ],
         ];

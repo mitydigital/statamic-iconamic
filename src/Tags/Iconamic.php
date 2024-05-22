@@ -23,7 +23,6 @@ class Iconamic extends Tags
      * {{ iconamic handle="my_field" }}
      *   Looks for a field called "my_field", and uses that to get the icon
      *
-     * @return string
      * @throws IconamicException
      */
     public function index(): string
@@ -50,14 +49,12 @@ class Iconamic extends Tags
      * @param  string|null  $handle  The handle of the field to load. If null, will look for the "handle" param and try to use that instead.
      * @param  bool  $checkIconExistsOnly  When true, will only return a boolean response if found.
      *
-     * @return string|bool
-     *
      * @throws IconamicException
      */
-    protected function _getIcon(string $handle = null, bool $checkIconExistsOnly = false): string|bool
+    protected function _getIcon(?string $handle = null, bool $checkIconExistsOnly = false): string|bool
     {
         // if there's no params or context, get out
-        if (!$this->params || !$this->context) {
+        if (! $this->params || ! $this->context) {
             return '';
         }
 
@@ -70,16 +67,16 @@ class Iconamic extends Tags
         if ($this->params->has('icon') && $this->params->has('path')) {
             // do nothing, treat it as a manual
         } elseif (is_array($this->context) && array_key_exists($handle,
-                $this->context) || isset($this->context[$handle])) {
+            $this->context) || isset($this->context[$handle])) {
             // if the context is NOT a string (if its a string, treat it as a manual one)
-            if (!is_string($this->context[$handle])) {
+            if (! is_string($this->context[$handle])) {
                 $icon = $this->context[$handle];
             }
         }
 
         // manual mode
         // is there an 'icon' and 'path' param?
-        if (!$icon && $this->params->has('icon') && $this->params->has('path')) {
+        if (! $icon && $this->params->has('icon') && $this->params->has('path')) {
             // load the raw file
             $icon = $this->params->get('icon', false);
             $path = $this->params->get('path', '');
@@ -88,7 +85,7 @@ class Iconamic extends Tags
             $pathHelper = $this->params->has('path_helper') ? $this->params->get('path_helper', 'default') : 'default';
 
             // if there's still no icon, then it doesn't exist
-            if (!$icon) {
+            if (! $icon) {
                 if ($checkIconExistsOnly) {
                     return false;
                 } else {
@@ -98,7 +95,7 @@ class Iconamic extends Tags
         } else {
             // if there's no icon or there's no fieldtype, quietly fail
             // (FYI, no fieldtype happens if the handle remains in content, but is no longer in the blueprint)
-            if (!$icon || !$icon->fieldtype()) {
+            if (! $icon || ! $icon->fieldtype()) {
                 if ($checkIconExistsOnly) {
                     return false;
                 } else {
@@ -163,7 +160,6 @@ class Iconamic extends Tags
      * {{ iconamic:has handle="my_field" }}
      *   Looks for a field called "my_field", and uses that to check if it exists
      *
-     * @return bool
      * @throws IconamicException
      */
     public function has(): bool
@@ -181,19 +177,17 @@ class Iconamic extends Tags
      *
      * @param  string  $svg  The SVG markup to process
      * @param  int  $index  The index to use to keep IDs unique
-     *
-     * @return string
      */
     protected function updateSvgMarkup(string $svg, int $index): string
     {
         // exclude these params
         $exclude = [
-            'icon', 'handle', 'path_helper', 'path'
+            'icon', 'handle', 'path_helper', 'path',
         ];
 
         $attributes = [];
         foreach ($this->params as $param => $value) {
-            if (!in_array($param, $exclude)) {
+            if (! in_array($param, $exclude)) {
                 $attributes[$param] = $value;
             }
         }
@@ -211,7 +205,6 @@ class Iconamic extends Tags
      *
      * @param  string  $handle  The handle to use as the source for the icon
      *
-     * @return string
      * @throws IconamicException
      */
     public function wildcard(string $handle): string

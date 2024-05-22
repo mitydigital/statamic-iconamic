@@ -15,7 +15,6 @@ return [
 
     'path' => 'icons',
 
-
     /*
     |--------------------------------------------------------------------------
     | Path Helper
@@ -37,7 +36,6 @@ return [
 
     'path_helper' => 'resource_path',
 
-
     /*
     |--------------------------------------------------------------------------
     | Recursively list icons?
@@ -50,6 +48,6 @@ return [
     |
     */
 
-    'recursive' => false
+    'recursive' => false,
 
 ];

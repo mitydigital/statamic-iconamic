@@ -13,12 +13,6 @@ class Iconamic
      * SVGs can use ID, which means you can easily get multiple IDs that are the same in your markup. That's not cool.
      * So this trues to replace common patterns with an index (i.e. fills) to make IDs unique in each instance of the
      * SVG.
-     *
-     * @param  string  $svg
-     * @param  int  $index
-     * @param  array  $attributes
-     *
-     * @return string
      */
     public function cleanSvg(string $svg, int $index, array $attributes = []): string
     {
@@ -69,10 +63,9 @@ class Iconamic
      * @param  string  $pathHelper  The Laravel path helper to use
      * @param  null|string  $filename  The SVG filename to use, if you want
      *
-     * @return string
      * @throws IconamicException
      */
-    public function getPath(string $path, string $pathHelper, null|string $filename = null): string
+    public function getPath(string $path, string $pathHelper, ?string $filename = null): string
     {
         // if the pathHelper is the default, get it from the config
         if ($pathHelper === 'default') {
@@ -104,11 +97,12 @@ class Iconamic
         }
 
         $path = explode('/', $filename);
-        $stack = array();
+        $stack = [];
         foreach ($path as $seg) {
             if ($seg == '..') {
                 // Ignore this segment, remove last segment from stack
                 array_pop($stack);
+
                 continue;
             }
 

@@ -2,8 +2,8 @@
 
 namespace MityDigital\Iconamic\Tests\Support;
 
-use MityDigital\Iconamic\Tests\TestCase;
 use MityDigital\Iconamic\Fieldtypes\Iconamic as IconamicFieldtype;
+use MityDigital\Iconamic\Tests\TestCase;
 use Statamic\Fields\Field;
 
 class IconamicFieldtypeTest extends TestCase
@@ -27,7 +27,11 @@ class IconamicFieldtypeTest extends TestCase
             [
                 'path',
                 'path_helper',
-                'recursive'
+                'recursive',
+                'placeholder',
+                'clearable',
+                'searchable',
+                'default',
             ],
             $fields->values()->keys()->toArray()
         );
@@ -43,7 +47,7 @@ class IconamicFieldtypeTest extends TestCase
             'base_path',
             'public_path',
             'resource_path',
-            'storage_path'
+            'storage_path',
         ], array_keys($fields->get('path_helper')->config()['options']));
     }
 
@@ -62,8 +66,8 @@ class IconamicFieldtypeTest extends TestCase
         $field = new Field(
             'icon',
             [
-                'path'        => 'icon-svg',
-                'path_helper' => 'resource_path'
+                'path' => 'icon-svg',
+                'path_helper' => 'resource_path',
             ]
         );
 

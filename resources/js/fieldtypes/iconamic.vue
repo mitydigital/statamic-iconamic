@@ -3,32 +3,37 @@
     <div class="flex">
         <v-select
             ref="input"
-            class="w-full"
-            append-to-body
-            clearable
-            :name="name"
-            :disabled="config.disabled || isReadOnly"
-            :options="options"
-            :placeholder="config.placeholder || 'Search ...'"
-            :searchable="true"
-            :multiple="false"
+            :calculate-position="positionOptions"
+            :clearable="config.clearable"
             :close-on-select="true"
-            :value="this.value"
             :create-option="(value) => ({ value, label: value })"
+            :disabled="config.disabled || isReadOnly"
+            :multiple="false"
+            :name="name"
+            :options="options"
+            :placeholder="__(config.placeholder)"
+            :searchable="config.searchable"
+            :value="this.value"
+            append-to-body
+            class="flex-1"
             @input="vueSelectUpdated"
             @search:focus="$emit('focus')"
             @search:blur="$emit('blur')">
-            <template slot="option" slot-scope="option">
+            <template #option="{ label, svg }">
+                <div class="flex items-center">
+                    <span class="flex-none iconamic-is-svg block w-5 h-5" v-html="svg"></span>
+                    <span class="text-xs ml-4 truncate">{{ label }}</span>
+                </div>
+            </template>
+            <template #selected-option="{ label }">
                 <span class="flex items-center">
-                <span class="flex-none iconamic-is-svg block w-5 h-5" v-html="option.svg"></span>
-                <span class="text-xs ml-4 text-gray-800 truncate">{{ option.label }}</span>
+                <span class="flex-none iconamic-is-svg block w-5 h-5" v-html="meta.icons[label]"></span>
+                <span class="text-xs ml-4 truncate">{{ label }}</span>
                 </span>
             </template>
-            <template slot="selected-option" slot-scope="option">
-                <span class="flex items-center">
-                <span class="flex-none iconamic-is-svg block w-5 h-5" v-html="meta.icons[option.label]"></span>
-                <span class="text-xs ml-4 text-gray-800 truncate">{{ option.label }}</span>
-                </span>
+            <template #no-options>
+                <div class="text-sm text-gray-700 rtl:text-right ltr:text-left py-2 px-4"
+                     v-text="__('No options to choose from.')"/>
             </template>
         </v-select>
     </div>
@@ -37,9 +42,11 @@
 
 <script>
 
+import PositionsSelectOptions from './../../../vendor/statamic/cms/resources/js/mixins/PositionsSelectOptions';
+
 export default {
 
-    mixins: [Fieldtype],
+    mixins: [Fieldtype, PositionsSelectOptions],
 
     computed: {
         options() {
@@ -68,7 +75,8 @@ export default {
             } else {
                 this.update(null);
             }
-        }
+        },
+
     }
 
 };

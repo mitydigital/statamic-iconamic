@@ -8,7 +8,6 @@ use MityDigital\Iconamic\Tests\TestCase;
 
 class IconamicSupportTest extends TestCase
 {
-
     /** @test */
     public function get_path_successful_with_app_path()
     {
@@ -82,21 +81,21 @@ class IconamicSupportTest extends TestCase
         $this->assertEquals(
             '<svg class="w-4 h-4"/>',
             Iconamic::cleanSvg('<svg></svg>', 2, [
-                'class' => 'w-4 h-4'
+                'class' => 'w-4 h-4',
             ]));
 
         // update existing class
         $this->assertEquals(
             '<svg class="w-4 h-4 text-blue-500"/>',
             Iconamic::cleanSvg('<svg class="w-4 h-4"></svg>', 2, [
-                'class' => 'text-blue-500'
+                'class' => 'text-blue-500',
             ]));
 
         // replace existing class
         $this->assertEquals(
             '<svg class="w-8 h-8"/>',
             Iconamic::cleanSvg('<svg class="w-4 h-4"></svg>', 2, [
-                'classReplace' => 'w-8 h-8'
+                'classReplace' => 'w-8 h-8',
             ]));
 
         // replace and append class
@@ -104,7 +103,7 @@ class IconamicSupportTest extends TestCase
             '<svg class="w-8 h-8 text-blue-500"/>',
             Iconamic::cleanSvg('<svg class="w-4 h-4"></svg>', 2, [
                 'class' => 'text-blue-500',
-                'classReplace' => 'w-8 h-8'
+                'classReplace' => 'w-8 h-8',
             ]));
 
         // replace and append, order does not matter
@@ -112,14 +111,14 @@ class IconamicSupportTest extends TestCase
             '<svg class="w-8 h-8 text-blue-500"/>',
             Iconamic::cleanSvg('<svg class="w-4 h-4"></svg>', 2, [
                 'classReplace' => 'w-8 h-8',
-                'class' => 'text-blue-500'
+                'class' => 'text-blue-500',
             ]));
 
         // others get added only
         $this->assertEquals(
             '<svg class="w-4 h-4" monkey="tail"/>',
             Iconamic::cleanSvg('<svg class="w-4 h-4"></svg>', 2, [
-                'monkey' => 'tail'
+                'monkey' => 'tail',
             ]));
 
         // id is updated accordingly by the cleaner, and left as is
@@ -134,7 +133,7 @@ class IconamicSupportTest extends TestCase
         $this->assertEquals(
             '<svg id="identification" class="w-4 h-4"/>',
             Iconamic::cleanSvg('<svg id="svg" class="w-4 h-4"></svg>', 2, [
-                'id' => 'identification'
+                'id' => 'identification',
             ]));
 
         // class and basic addition
@@ -144,7 +143,7 @@ class IconamicSupportTest extends TestCase
                 'classReplace' => 'w-6 h-6',
                 'class' => 'text-blue-500',
                 'monkey' => 'tail',
-                'pizza' => 'crust'
+                'pizza' => 'crust',
             ]));
     }
 }
