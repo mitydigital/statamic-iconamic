@@ -75,11 +75,16 @@ class Iconamic extends Tags
         }
 
         // manual mode
-        // is there an 'icon' and 'path' param?
-        if (! $icon && $this->params->has('icon') && $this->params->has('path')) {
+        // is there an 'icon'?
+        if (! $icon && $this->params->has('icon')) {
             // load the raw file
             $icon = $this->params->get('icon', false);
-            $path = $this->params->get('path', '');
+            $path = $this->params->get('path', null);
+
+            // if there is no path, get the default
+            if (!$path) {
+                $path = config('iconamic.path');
+            }
 
             // do we have a path helper?
             $pathHelper = $this->params->has('path_helper') ? $this->params->get('path_helper', 'default') : 'default';
