@@ -71,7 +71,7 @@ class Iconamic
         if ($pathHelper === 'default') {
             $pathHelper = config('iconamic.path_helper');
         }
-
+ray($pathHelper)->blue();
         // build the directory based off of the configured path and path helper
         switch ($pathHelper) {
             case 'app_path':
@@ -95,7 +95,7 @@ class Iconamic
             default:
                 throw IconamicException::unknownPathHelper($pathHelper);
         }
-
+ray($directory)->red();
         $path = explode('/', $filename);
         $stack = [];
         foreach ($path as $seg) {
