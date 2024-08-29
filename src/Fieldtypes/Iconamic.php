@@ -185,7 +185,7 @@ class Iconamic extends Fieldtype
 
     public function preProcessIndex($value)
     {
-        $path = IconamicFacade::getPath($this->config('path'), $this->config('path_helper', 'default'), $value.'.svg');
+        $path = IconamicFacade::getPath($this->config('path', config('iconamic.path')), $this->config('path_helper', 'default'), $value.'.svg');
 
         try {
             $svg = file_get_contents($path);
