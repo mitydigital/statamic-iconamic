@@ -6,6 +6,7 @@ use DirectoryIterator;
 use MityDigital\Iconamic\Facades\Iconamic as IconamicFacade;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Statamic\Facades\Blink;
 use Statamic\Fields\Fieldtype;
 
 class Iconamic extends Fieldtype
@@ -180,5 +181,29 @@ class Iconamic extends Fieldtype
                 ],
             ],
         ];
+    }
+
+    public function preProcessIndex($value)
+    {
+        $path = IconamicFacade::getPath($this->config('path'), $this->config('path_helper', 'default'), $value.'.svg');
+
+        try {
+            $svg = file_get_contents($path);
+
+            // get index
+            $index = Blink::get('iconamic-index-fieldtype', 0);
+            $index++;
+
+            // clean the svg markup to prevent duplicate IDs
+            $svg = IconamicFacade::cleanSvg($svg, $index);
+
+            // set index
+            Blink::put('iconamic-index-fieldtype', $index);
+
+            return $svg;
+        }
+        catch (\ErrorException $e) {
+            return $value;
+        }
     }
 }
