@@ -71,7 +71,7 @@ class Iconamic
         if ($pathHelper === 'default') {
             $pathHelper = config('iconamic.path_helper');
         }
-ray($pathHelper)->blue();
+
         // build the directory based off of the configured path and path helper
         switch ($pathHelper) {
             case 'app_path':
@@ -95,23 +95,25 @@ ray($pathHelper)->blue();
             default:
                 throw IconamicException::unknownPathHelper($pathHelper);
         }
-ray($directory)->red();
-        $path = explode('/', $filename);
+
         $stack = [];
-        foreach ($path as $seg) {
-            if ($seg == '..') {
-                // Ignore this segment, remove last segment from stack
-                array_pop($stack);
+        if ($filename) {
+            $path = explode('/', $filename);
+            foreach ($path as $seg) {
+                if ($seg == '..') {
+                    // Ignore this segment, remove last segment from stack
+                    array_pop($stack);
 
-                continue;
+                    continue;
+                }
+
+                if ($seg == '.') {
+                    // Ignore this segment
+                    continue;
+                }
+
+                $stack[] = $seg;
             }
-
-            if ($seg == '.') {
-                // Ignore this segment
-                continue;
-            }
-
-            $stack[] = $seg;
         }
 
         $cleanFilename = implode('/', $stack);
