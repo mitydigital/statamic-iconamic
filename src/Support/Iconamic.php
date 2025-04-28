@@ -96,22 +96,24 @@ class Iconamic
                 throw IconamicException::unknownPathHelper($pathHelper);
         }
 
-        $path = explode('/', $filename);
         $stack = [];
-        foreach ($path as $seg) {
-            if ($seg == '..') {
-                // Ignore this segment, remove last segment from stack
-                array_pop($stack);
+        if ($filename) {
+            $path = explode('/', $filename);
+            foreach ($path as $seg) {
+                if ($seg == '..') {
+                    // Ignore this segment, remove last segment from stack
+                    array_pop($stack);
 
-                continue;
+                    continue;
+                }
+
+                if ($seg == '.') {
+                    // Ignore this segment
+                    continue;
+                }
+
+                $stack[] = $seg;
             }
-
-            if ($seg == '.') {
-                // Ignore this segment
-                continue;
-            }
-
-            $stack[] = $seg;
         }
 
         $cleanFilename = implode('/', $stack);
