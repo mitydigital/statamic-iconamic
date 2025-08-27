@@ -72,9 +72,7 @@ class Iconamic extends Fieldtype
             $dir = new DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
             $index = 0;
             foreach ($dir as $fileinfo) {
-
                 if (! $fileinfo->isDot() && $fileinfo->isFile() && $fileinfo->getExtension() == 'svg') {
-
                     $name = str_replace($path.'/', '', $fileinfo->getBasename());
                     $key = $name;
                     if (str_ends_with($name, '.svg')) {
@@ -99,6 +97,30 @@ class Iconamic extends Fieldtype
         ];
     }
 
+    public function preProcessIndex($value)
+    {
+        $path = IconamicFacade::getPath($this->config('path', config('iconamic.path')),
+            $this->config('path_helper', 'default'), $value.'.svg');
+
+        try {
+            $svg = file_get_contents($path);
+
+            // get index
+            $index = Blink::get('iconamic-index-fieldtype', 0);
+            $index++;
+
+            // clean the svg markup to prevent duplicate IDs
+            $svg = IconamicFacade::cleanSvg($svg, $index);
+
+            // set index
+            Blink::put('iconamic-index-fieldtype', $index);
+
+            return $svg;
+        } catch (\ErrorException $e) {
+            return $value;
+        }
+    }
+
     /**
      * Each fieldtype will use the default configuration, but can be overridden for each usage.
      *
@@ -115,14 +137,16 @@ class Iconamic extends Fieldtype
                 'fields' => [
                     'path' => [
                         'display' => __('iconamic::fieldtype.config.core.path.display'),
-                        'instructions' => __('iconamic::fieldtype.config.core.path.instructions', ['path' => config('iconamic.path')]),
+                        'instructions' => __('iconamic::fieldtype.config.core.path.instructions',
+                            ['path' => config('iconamic.path')]),
                         'type' => 'text',
                         'default' => null,
                         'placeholder' => config('iconamic.path'),
                     ],
                     'path_helper' => [
                         'display' => __('iconamic::fieldtype.config.core.path_helper.display'),
-                        'instructions' => __('iconamic::fieldtype.config.core.path_helper.instructions', ['path_helper' => config('iconamic.path_helper')]),
+                        'instructions' => __('iconamic::fieldtype.config.core.path_helper.instructions',
+                            ['path_helper' => config('iconamic.path_helper')]),
                         'type' => 'select',
                         'default' => 'default',
                         'options' => [
@@ -136,7 +160,9 @@ class Iconamic extends Fieldtype
                     ],
                     'recursive' => [
                         'display' => __('iconamic::fieldtype.config.core.recursive.display'),
-                        'instructions' => config('iconamic.recursive') ? __('iconamic::fieldtype.config.core.recursive.instructions.1') : __('iconamic::fieldtype.config.core.recursive.instructions.0'),
+                        'instructions' => config('iconamic.recursive')
+                            ? __('iconamic::fieldtype.config.core.recursive.instructions.1')
+                            : __('iconamic::fieldtype.config.core.recursive.instructions.0'),
                         'type' => 'select',
                         'default' => 'default',
                         'options' => [
@@ -181,29 +207,5 @@ class Iconamic extends Fieldtype
                 ],
             ],
         ];
-    }
-
-    public function preProcessIndex($value)
-    {
-        $path = IconamicFacade::getPath($this->config('path', config('iconamic.path')), $this->config('path_helper', 'default'), $value.'.svg');
-
-        try {
-            $svg = file_get_contents($path);
-
-            // get index
-            $index = Blink::get('iconamic-index-fieldtype', 0);
-            $index++;
-
-            // clean the svg markup to prevent duplicate IDs
-            $svg = IconamicFacade::cleanSvg($svg, $index);
-
-            // set index
-            Blink::put('iconamic-index-fieldtype', $index);
-
-            return $svg;
-        }
-        catch (\ErrorException $e) {
-            return $value;
-        }
     }
 }

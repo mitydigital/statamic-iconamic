@@ -82,7 +82,7 @@ class Iconamic extends Tags
             $path = $this->params->get('path', null);
 
             // if there is no path, get the default
-            if (!$path) {
+            if (! $path) {
                 $path = config('iconamic.path');
             }
 

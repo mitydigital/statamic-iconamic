@@ -3,23 +3,18 @@
 namespace MityDigital\Iconamic\Tests;
 
 use Illuminate\Support\Facades\File;
-use MityDigital\Iconamic\Facades\Iconamic;
-use MityDigital\Iconamic\ServiceProvider as IconamicServiceProvider;
-use Orchestra\Testbench\TestCase as OrchestraTestCase;
-use Statamic\Assets\AssetContainer;
-use Statamic\Providers\StatamicServiceProvider;
-use Statamic\Statamic;
+use MityDigital\Iconamic\ServiceProvider;
+use Statamic\Testing\AddonTestCase;
 
-abstract class TestCase extends OrchestraTestCase
+abstract class TestCase extends AddonTestCase
 {
-    protected AssetContainer $assetContainer;
+    protected $shouldFakeVersion = true;
 
-    /**
-     * Setup the test environment.
-     */
-    protected function setUp(): void
+    protected string $addonServiceProvider = ServiceProvider::class;
+
+    protected function getEnvironmentSetUp($app)
     {
-        parent::setUp();
+        parent::getEnvironmentSetUp($app);
 
         config([
             'iconamic' => [
@@ -28,66 +23,19 @@ abstract class TestCase extends OrchestraTestCase
             ],
         ]);
 
-        File::copyDirectory(__DIR__.'/TestSupport/svg', base_path('svg'));
+        File::copyDirectory(__DIR__.'/__fixtures__/resources/svg', base_path('svg'));
 
         File::makeDirectory(resource_path('icon-svg'), 0755);
-        File::copy(__DIR__.'/TestSupport/svg/square.svg', resource_path('icon-svg').'/square.svg');
-        File::copy(__DIR__.'/TestSupport/svg/x.svg', resource_path('icon-svg').'/x.svg');
-        File::copy(__DIR__.'/TestSupport/svg/simple.svg', resource_path('icon-svg').'/simple.svg');
+        File::copy(__DIR__.'/__fixtures__/resources/svg/square.svg', resource_path('icon-svg').'/square.svg');
+        File::copy(__DIR__.'/__fixtures__/resources/svg/x.svg', resource_path('icon-svg').'/x.svg');
+        File::copy(__DIR__.'/__fixtures__/resources/svg/simple.svg', resource_path('icon-svg').'/simple.svg');
     }
 
-    /**
-     * Cleanup the test environment
-     */
     protected function tearDown(): void
     {
-        parent::tearDown();
-
         File::deleteDirectory(base_path('svg'));
         File::deleteDirectory(resource_path('icon-svg'));
-    }
 
-    /**
-     * Set up package aliases
-     */
-    protected function getPackageAliases($app)
-    {
-        return [
-            'Statamic' => Statamic::class,
-        ];
-    }
-
-    /**
-     * Set up package providers
-     */
-    protected function getPackageProviders($app)
-    {
-        return [
-            StatamicServiceProvider::class,
-            IconamicServiceProvider::class,
-        ];
-    }
-
-    /**
-     * Set up package aliases
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        parent::getEnvironmentSetUp($app);
-
-        $app->make(\Statamic\Extend\Manifest::class)->manifest = [
-            'mitydigital/iconamic' => [
-                'id' => 'mitydigital/iconamic',
-                'namespace' => 'MityDigital\\Iconamic\\',
-            ],
-        ];
-    }
-
-    /**
-     * Get the SVG source for a given icon and index
-     */
-    protected function getSvgSource($file, $index)
-    {
-        return Iconamic::cleanSvg(file_get_contents(__DIR__.'/TestSupport/svg/'.$file.'.svg'), $index);
+        parent::tearDown();
     }
 }

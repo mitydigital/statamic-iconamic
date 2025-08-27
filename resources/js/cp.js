@@ -1,5 +1,5 @@
-import IconamicField from './fieldtypes/iconamic.vue';
-import IconamicIndexField from './fieldtypes/iconamic_index.vue';
+import IconamicField from './fieldtypes/Iconamic.vue';
+import IconamicIndexField from './fieldtypes/IconamicIndex.vue';
 
 Statamic.booting(() => {
     Statamic.$components.register('iconamic-fieldtype', IconamicField);

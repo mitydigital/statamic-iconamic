@@ -1,14 +1,11 @@
 {
-  "resources/js/index.css": {
-    "file": "assets/index-78a0ade5.css",
-    "src": "resources/js/index.css"
-  },
-  "resources/js/index.js": {
-    "css": [
-      "assets/index-78a0ade5.css"
-    ],
-    "file": "assets/index-5f8b80ee.js",
+  "resources/js/cp.js": {
+    "file": "assets/cp-B6Ql2Iny.js",
+    "name": "cp",
+    "src": "resources/js/cp.js",
     "isEntry": true,
-    "src": "resources/js/index.js"
+    "css": [
+      "assets/cp-DGf3cc-q.css"
+    ]
   }
 }

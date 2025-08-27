@@ -21,29 +21,33 @@
   },
   "require": {
     "php": "^8.2",
-    "statamic/cms": "^4.0 || ^5.0"
+    "statamic/cms": "^6.0"
   },
   "autoload-dev": {
     "psr-4": {
-      "MityDigital\\Iconamic\\Tests\\": "tests/"
+      "MityDigital\\Iconamic\\Tests\\": "tests"
     }
   },
   "require-dev": {
-    "orchestra/testbench": "^6.9|^7.1",
-    "phpunit/phpunit": "^9.5",
-    "laravel/pint": "^1.16"
+    "orchestra/testbench": "^10.0",
+    "laravel/pint": "^1.24",
+    "pestphp/pest": "^4.0",
+    "spatie/laravel-ray": "^1.33"
   },
   "scripts": {
     "pint": [
       "./vendor/bin/pint"
     ],
     "test": [
-      "./vendor/bin/phpunit"
+      "php -d memory_limit=-1 -d max_execution_time=0 ./vendor/bin/pest"
     ]
   },
   "config": {
     "allow-plugins": {
-      "pixelfear/composer-dist-plugin": true
+      "pixelfear/composer-dist-plugin": true,
+      "pestphp/pest-plugin": true
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

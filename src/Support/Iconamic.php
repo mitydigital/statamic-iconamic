@@ -22,7 +22,7 @@ class Iconamic
         $svg = str_replace('url(#', 'url(#iconamic-'.$index.'-', $svg);
 
         // replace attributes
-        $dom = new DOMDocument();
+        $dom = new DOMDocument;
         $dom->loadXML($svg, LIBXML_NOERROR);
 
         // if we have classReplace, do this first because it may be appended to by "class"
