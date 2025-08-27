@@ -5,7 +5,10 @@
 </template>
 
 <script>
+
+import {IndexFieldtypeMixin} from '@statamic/cms';
+
 export default {
-    mixins: [IndexFieldtype],
+    mixins: [IndexFieldtypeMixin],
 }
 </script>
