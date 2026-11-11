@@ -2,10 +2,8 @@
 
 namespace MityDigital\Iconamic\Fieldtypes;
 
-use DirectoryIterator;
+use Illuminate\Support\Facades\URL;
 use MityDigital\Iconamic\Facades\Iconamic as IconamicFacade;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use Statamic\Facades\Blink;
 use Statamic\Fields\Fieldtype;
 
@@ -16,85 +14,55 @@ class Iconamic extends Fieldtype
     protected $categories = ['media', 'special'];
 
     /**
-     * Get the icons as an array to pass to the fieldtype component
+     * Pass the fieldtype component a URL for the icon list rather than the list itself
+     *
+     * Statamic calls preload() once per field instance, so embedding every SVG here sent the whole icon set once per
+     * field: an entry with many icon fields (e.g. inside replicator sets) carried dozens of identical copies. The
+     * component fetches the list from the URL once per page and shares it between fields. The URL is signed, so the
+     * endpoint only lists folders a field is configured for, and deterministic, so every field using the same folder
+     * gets the same URL and the browser can cache it.
      *
      * @return array[]
      */
     public function preload(): array
     {
-        // what path do we want to look at?
-        $path = $this->config('path', config('iconamic.path'));
-
-        // what helper do we want to use?
-        $pathHelper = $this->config('path_helper', 'default');
-
-        $enableRecursiveMode = false;
-        switch ($this->config('recursive', 'default')) {
-            case 'false':
-                $enableRecursiveMode = false;
-                break;
-            case 'true':
-                $enableRecursiveMode = true;
-                break;
-            default:
-                $enableRecursiveMode = config('iconamic.recursive', false);
-        }
-
-        // load the icons for the select list
-        $icons = [];
-
-        if ($enableRecursiveMode) {
-            // recursively list files
-            $dir = new DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
-            $path = IconamicFacade::getPath($path, $pathHelper);
-            $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
-            $index = 0;
-            foreach ($files as $file) {
-                if ($file->isFile() && $file->getExtension() == 'svg') {
-                    // get the new name
-                    $name = str_replace($path.'/', '', $file->getRealPath());
-
-                    $key = $name;
-                    if (str_ends_with($name, '.svg')) {
-                        $key = substr($key, 0, -4);
-                    }
-
-                    $svg = file_get_contents($file->getRealPath());
-
-                    // clean that svg (ick)
-                    $icons[$key] = IconamicFacade::cleanSvg($svg, $index);
-
-                    $index++; // increase the index
-                }
-            }
-        } else {
-            // the old way of doing it
-            $dir = new DirectoryIterator(IconamicFacade::getPath($path, $pathHelper));
-            $index = 0;
-            foreach ($dir as $fileinfo) {
-                if (! $fileinfo->isDot() && $fileinfo->isFile() && $fileinfo->getExtension() == 'svg') {
-                    $name = str_replace($path.'/', '', $fileinfo->getBasename());
-                    $key = $name;
-                    if (str_ends_with($name, '.svg')) {
-                        $key = substr($key, 0, -4);
-                    }
-
-                    $svg = file_get_contents($fileinfo->getRealPath());
-
-                    // clean that svg (ick)
-                    $icons[$key] = IconamicFacade::cleanSvg($svg, $index);
-
-                    $index++; // increase the index
-                }
-            }
-        }
-
-        // sort by key
-        ksort($icons);
+        $source = $this->iconSource();
 
         return [
-            'icons' => $icons,
+            'url' => URL::signedRoute('statamic.cp.iconamic.icons', $source, null, false),
+            'selected' => $this->selectedIcons($source),
         ];
+    }
+
+    /**
+     * The folder settings for this field: path, path helper and recursive mode
+     */
+    protected function iconSource(): array
+    {
+        return [
+            'path' => $this->config('path', config('iconamic.path')),
+            'path_helper' => $this->config('path_helper', 'default'),
+            'recursive' => (string) $this->config('recursive', 'default'),
+        ];
+    }
+
+    /**
+     * The SVG for each currently selected icon, so the field can show its value before the list has loaded
+     */
+    protected function selectedIcons(array $source): array
+    {
+        $value = $this->field?->value();
+        $names = array_filter(is_array($value) ? $value : [$value], fn ($name) => is_string($name) && $name !== '');
+
+        $selected = [];
+        foreach ($names as $index => $name) {
+            $path = IconamicFacade::getPath($source['path'], $source['path_helper'], $name.'.svg');
+            if (is_file($path)) {
+                $selected[$name] = IconamicFacade::cleanSvg(file_get_contents($path), $index);
+            }
+        }
+
+        return $selected;
     }
 
     public function preProcessIndex($value)

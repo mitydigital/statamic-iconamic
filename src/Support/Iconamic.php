@@ -53,6 +53,53 @@ class Iconamic
     }
 
     /**
+     * List the icons in a folder, keyed by name (relative path without ".svg"), as cleaned SVG markup
+     *
+     * @param  string  $path  The path to use
+     * @param  string  $pathHelper  The Laravel path helper to use
+     * @param  string  $recursive  "true", "false" or "default" (use the config)
+     *
+     * @throws IconamicException
+     */
+    public function icons(string $path, string $pathHelper, string $recursive = 'default'): array
+    {
+        $enableRecursiveMode = match ($recursive) {
+            'true' => true,
+            'false' => false,
+            default => config('iconamic.recursive', false),
+        };
+
+        $directory = $this->getPath($path, $pathHelper);
+        $files = $enableRecursiveMode
+            ? new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory))
+            : new \DirectoryIterator($directory);
+
+        $icons = [];
+        $index = 0;
+        foreach ($files as $file) {
+            if (! $file->isFile() || $file->getExtension() != 'svg') {
+                continue;
+            }
+
+            $name = $enableRecursiveMode
+                ? str_replace($directory.'/', '', $file->getRealPath())
+                : $file->getBasename();
+
+            $key = str_ends_with($name, '.svg') ? substr($name, 0, -4) : $name;
+
+            // clean that svg (ick)
+            $icons[$key] = $this->cleanSvg(file_get_contents($file->getRealPath()), $index);
+
+            $index++;
+        }
+
+        // sort by key
+        ksort($icons);
+
+        return $icons;
+    }
+
+    /**
      * Get the path for an icon
      *
      * Will use the $path within the path helper to create a full path as a string.

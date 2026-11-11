@@ -39,26 +39,45 @@ it('has path and path helper config fields', function () {
     ], array_keys($fields->get('path_helper')->config()['options']));
 });
 
-it('can get a list of icons using defaults in preload', function () {
-    $icons = $this->fieldtype->preload();
+it('preloads a signed url for the icon list instead of the icons', function () {
+    $meta = $this->fieldtype->preload();
 
-    $this->assertArrayHasKey('icons', $icons);
-    $this->assertCount(5, $icons['icons']);
+    $this->assertArrayNotHasKey('icons', $meta);
+    $this->assertStringStartsWith('/', $meta['url']);
+    $this->assertStringContainsString('path=svg', $meta['url']);
+    $this->assertStringContainsString('signature=', $meta['url']);
 });
 
-it('can get a list of icons using field overrides', function () {
-    $field = new Field(
-        'icon',
-        [
-            'path' => 'icon-svg',
-            'path_helper' => 'resource_path',
-        ]
-    );
+it('preloads the field override folder in the icon list url', function () {
+    $this->fieldtype->setField(new Field('icon', [
+        'path' => 'icon-svg',
+        'path_helper' => 'resource_path',
+    ]));
 
-    $this->fieldtype->setField($field);
+    $meta = $this->fieldtype->preload();
 
-    $icons = $this->fieldtype->preload();
-
-    $this->assertArrayHasKey('icons', $icons);
-    $this->assertCount(3, $icons['icons']);
+    $this->assertStringContainsString('path=icon-svg', $meta['url']);
+    $this->assertStringContainsString('path_helper=resource_path', $meta['url']);
 });
+
+it('preloads the same url for every field using the same folder', function () {
+    $first = (new IconamicFieldtype)->setField(new Field('first', []))->preload();
+    $second = (new IconamicFieldtype)->setField(new Field('second', []))->preload();
+
+    $this->assertEquals($first['url'], $second['url']);
+});
+
+it('preloads the svg of the selected icon', function () {
+    $this->fieldtype->setField((new Field('icon', []))->setValue('square'));
+
+    $meta = $this->fieldtype->preload();
+
+    $this->assertEquals(['square'], array_keys($meta['selected']));
+    $this->assertStringStartsWith('<svg', $meta['selected']['square']);
+});
+
+it('preloads nothing selected for an empty or missing icon', function ($value) {
+    $this->fieldtype->setField((new Field('icon', []))->setValue($value));
+
+    $this->assertEquals([], $this->fieldtype->preload()['selected']);
+})->with([null, '', 'not-an-icon']);
