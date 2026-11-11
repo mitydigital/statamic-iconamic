@@ -2,7 +2,7 @@
 import {Fieldtype} from '@statamic/cms';
 import {Combobox} from '@statamic/cms/ui';
 import {computed, onMounted, ref} from 'vue';
-import {loadIcons} from '../iconCache.js';
+import {loadIcons} from '../utilities/icon-cache.js';
 
 const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
