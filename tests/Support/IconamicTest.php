@@ -121,3 +121,14 @@ it('can clean svg and apply additional attributes', function () {
             'pizza' => 'crust',
         ]));
 });
+
+it('lists the icons in a folder, sorted by name', function () {
+    $icons = Iconamic::icons('svg', 'base_path');
+
+    $this->assertEquals(['circle', 'simple', 'square', 'triangle', 'x'], array_keys($icons));
+    $this->assertStringStartsWith('<svg', $icons['circle']);
+});
+
+it('lists the icons in a folder using a different path helper', function () {
+    $this->assertEquals(['simple', 'square', 'x'], array_keys(Iconamic::icons('icon-svg', 'resource_path')));
+});

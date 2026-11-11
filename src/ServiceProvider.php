@@ -22,6 +22,10 @@ class ServiceProvider extends AddonServiceProvider
         MoveConfigFile::class,
     ];
 
+    protected $routes = [
+        'cp' => __DIR__.'/../routes/cp.php',
+    ];
+
     protected $vite = [
         'input' => [
             'resources/js/cp.js',

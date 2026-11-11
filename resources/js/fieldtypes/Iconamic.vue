@@ -1,11 +1,21 @@
 <script setup>
 import {Fieldtype} from '@statamic/cms';
 import {Combobox} from '@statamic/cms/ui';
-import {computed} from 'vue';
+import {computed, onMounted, ref} from 'vue';
+import {loadIcons} from '../utilities/icon-cache.js';
 
 const emit = defineEmits(Fieldtype.emits);
 const props = defineProps(Fieldtype.props);
 const {isReadOnly, defineReplicatorPreview, update} = Fieldtype.use(emit, props);
+
+// Start with just the selected icon(s) so the value shows straight away, then swap in the shared full list.
+const icons = ref({...(props.meta.selected ?? {})});
+
+onMounted(() => {
+    loadIcons(props.meta.url).then((all) => {
+        icons.value = all;
+    });
+});
 
 const selectedOptions = computed(() => {
     let selections = props.value === null ? [] : props.value;
@@ -22,11 +32,11 @@ const selectedOptions = computed(() => {
 const options = computed(() => {
     let options = [];
 
-    for (let svg in props.meta.icons) {
+    for (let svg in icons.value) {
         options.push({
             value: svg,
             label: svg,
-            svg: props.meta.icons[svg]
+            svg: icons.value[svg]
         });
     }
 
