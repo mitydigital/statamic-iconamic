@@ -8,51 +8,6 @@ use MityDigital\Iconamic\Exceptions\IconamicException;
 class Iconamic
 {
     /**
-     * Clean an SVG for rendering
-     *
-     * SVGs can use ID, which means you can easily get multiple IDs that are the same in your markup. That's not cool.
-     * So this trues to replace common patterns with an index (i.e. fills) to make IDs unique in each instance of the
-     * SVG.
-     */
-    public function cleanSvg(string $svg, int $index, array $attributes = []): string
-    {
-        // make "#id" and id="" unique
-        $svg = str_replace(' id="', ' id="iconamic-'.$index.'-', $svg);
-        $svg = str_replace(' xlink:href="#', ' xlink:href="#iconamic-'.$index.'-', $svg);
-        $svg = str_replace('url(#', 'url(#iconamic-'.$index.'-', $svg);
-
-        // replace attributes
-        $dom = new DOMDocument;
-        $dom->loadXML($svg, LIBXML_NOERROR);
-
-        // if we have classReplace, do this first because it may be appended to by "class"
-        if (array_key_exists('classReplace', $attributes)) {
-            // set the class from classReplace
-            $dom->documentElement->setAttribute('class', $attributes['classReplace']);
-
-            unset($attributes['classReplace']);
-        }
-
-        foreach ($attributes as $attribute => $value) {
-            if ($attribute === 'class') {
-                if ($dom->documentElement->hasAttribute('class')) {
-                    // append to the class
-                    $existing = $dom->documentElement->getAttribute('class');
-                    $dom->documentElement->setAttribute($attribute, $existing.' '.$value);
-                } else {
-                    // add the class
-                    $dom->documentElement->setAttribute($attribute, $value);
-                }
-            } else {
-                // overwrite attribute - simply add it
-                $dom->documentElement->setAttribute($attribute, $value);
-            }
-        }
-
-        return $dom->saveXML($dom->documentElement);
-    }
-
-    /**
      * List the icons in a folder, keyed by name (relative path without ".svg"), as cleaned SVG markup
      *
      * @param  string  $path  The path to use
@@ -71,18 +26,23 @@ class Iconamic
 
         $directory = $this->getPath($path, $pathHelper);
         $files = $enableRecursiveMode
-            ? new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($directory))
+            ? new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(
+                    $directory,
+                    \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS
+                )
+            )
             : new \DirectoryIterator($directory);
 
         $icons = [];
         $index = 0;
         foreach ($files as $file) {
-            if (! $file->isFile() || $file->getExtension() != 'svg') {
+            if (! $file->isFile() || strtolower($file->getExtension()) !== 'svg') {
                 continue;
             }
 
             $name = $enableRecursiveMode
-                ? str_replace($directory.'/', '', $file->getRealPath())
+                ? substr($file->getPathname(), strlen(rtrim($directory, '/\\')) + 1)
                 : $file->getBasename();
 
             $key = str_ends_with($name, '.svg') ? substr($name, 0, -4) : $name;
@@ -172,5 +132,50 @@ class Iconamic
             // return the full path with no filename
             return $directory;
         }
+    }
+
+    /**
+     * Clean an SVG for rendering
+     *
+     * SVGs can use ID, which means you can easily get multiple IDs that are the same in your markup. That's not cool.
+     * So this trues to replace common patterns with an index (i.e. fills) to make IDs unique in each instance of the
+     * SVG.
+     */
+    public function cleanSvg(string $svg, int $index, array $attributes = []): string
+    {
+        // make "#id" and id="" unique
+        $svg = str_replace(' id="', ' id="iconamic-'.$index.'-', $svg);
+        $svg = str_replace(' xlink:href="#', ' xlink:href="#iconamic-'.$index.'-', $svg);
+        $svg = str_replace('url(#', 'url(#iconamic-'.$index.'-', $svg);
+
+        // replace attributes
+        $dom = new DOMDocument;
+        $dom->loadXML($svg, LIBXML_NOERROR);
+
+        // if we have classReplace, do this first because it may be appended to by "class"
+        if (array_key_exists('classReplace', $attributes)) {
+            // set the class from classReplace
+            $dom->documentElement->setAttribute('class', $attributes['classReplace']);
+
+            unset($attributes['classReplace']);
+        }
+
+        foreach ($attributes as $attribute => $value) {
+            if ($attribute === 'class') {
+                if ($dom->documentElement->hasAttribute('class')) {
+                    // append to the class
+                    $existing = $dom->documentElement->getAttribute('class');
+                    $dom->documentElement->setAttribute($attribute, $existing.' '.$value);
+                } else {
+                    // add the class
+                    $dom->documentElement->setAttribute($attribute, $value);
+                }
+            } else {
+                // overwrite attribute - simply add it
+                $dom->documentElement->setAttribute($attribute, $value);
+            }
+        }
+
+        return $dom->saveXML($dom->documentElement);
     }
 }
