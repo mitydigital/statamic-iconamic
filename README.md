@@ -51,6 +51,7 @@ help you. So be awesome - it'll feel fantastic.
 ## Credits
 
 - [Marty Friedel](https://github.com/martyf)
+- [Flynn](https://github.com/piedshag) for an epic performance kick
 
 ## License
 
