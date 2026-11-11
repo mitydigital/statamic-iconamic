@@ -23,7 +23,7 @@ it('can return svg of icon with index', function () {
     );
 
     // create the fieldtype
-    $fieldtype = new \MityDigital\Iconamic\Fieldtypes\Iconamic;
+    $fieldtype = new MityDigital\Iconamic\Fieldtypes\Iconamic;
     $fieldtype->setField($field);
 
     // set the required context
@@ -46,7 +46,7 @@ it('returns nothing when icon not found', function () {
     );
 
     // create the fieldtype
-    $fieldtype = new \MityDigital\Iconamic\Fieldtypes\Iconamic;
+    $fieldtype = new MityDigital\Iconamic\Fieldtypes\Iconamic;
     $fieldtype->setField($field);
 
     // set the required context
@@ -69,7 +69,7 @@ it('can return true when icon exists using has', function () {
     );
 
     // create the fieldtype
-    $fieldtype = new \MityDigital\Iconamic\Fieldtypes\Iconamic;
+    $fieldtype = new MityDigital\Iconamic\Fieldtypes\Iconamic;
     $fieldtype->setField($field);
 
     // set the required context
@@ -92,7 +92,7 @@ it('can return false when icon does not exist using has', function () {
     );
 
     // create the fieldtype
-    $fieldtype = new \MityDigital\Iconamic\Fieldtypes\Iconamic;
+    $fieldtype = new MityDigital\Iconamic\Fieldtypes\Iconamic;
     $fieldtype->setField($field);
 
     // set the required context
@@ -115,7 +115,7 @@ it('can return svg of icon with wildcard', function () {
     );
 
     // create the fieldtype
-    $fieldtype = new \MityDigital\Iconamic\Fieldtypes\Iconamic;
+    $fieldtype = new MityDigital\Iconamic\Fieldtypes\Iconamic;
     $fieldtype->setField($field);
 
     // set the required context
@@ -138,7 +138,7 @@ it('returns nothing from wildcard if handle not found', function () {
     );
 
     // create the fieldtype
-    $fieldtype = new \MityDigital\Iconamic\Fieldtypes\Iconamic;
+    $fieldtype = new MityDigital\Iconamic\Fieldtypes\Iconamic;
     $fieldtype->setField($field);
 
     // set the required context
@@ -161,7 +161,7 @@ it('includes additional icons in returned icon', function () {
     );
 
     // create the fieldtype
-    $fieldtype = new \MityDigital\Iconamic\Fieldtypes\Iconamic;
+    $fieldtype = new MityDigital\Iconamic\Fieldtypes\Iconamic;
     $fieldtype->setField($field);
 
     // set the required context

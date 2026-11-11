@@ -1,5 +1,8 @@
 <?php
 
+use MityDigital\Iconamic\Facades\Iconamic;
+use MityDigital\Iconamic\Tests\TestCase;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -11,7 +14,7 @@
 |
 */
 
-pest()->extend(\MityDigital\Iconamic\Tests\TestCase::class)
+pest()->extend(TestCase::class)
     // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
     ->in('.');
 
@@ -43,7 +46,7 @@ expect()->extend('toBeOne', function () {
 
 function getSvgSource($file, $index)
 {
-    return \MityDigital\Iconamic\Facades\Iconamic::cleanSvg(
+    return Iconamic::cleanSvg(
         file_get_contents(__DIR__.'/__fixtures__/resources/svg/'.$file.'.svg'),
         $index
     );
